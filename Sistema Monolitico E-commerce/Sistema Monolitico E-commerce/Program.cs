@@ -50,8 +50,8 @@ namespace Sistema_Monolitico_E_commerce
         static List<Equipamento> listaEquipamentos = new List<Equipamento>();
         static List<Venda> listaVendas = new List<Venda>();
 
-        string ARQ_KIMONOS = "kimonos.txt";
-        string ARQ_EQUIPAMENTOS = "equipamentos.txt";
-        string ARQ_VENDAS = "vendas.txt";
+        private static readonly string ARQ_KIMONOS = "kimonos.txt";
+        private static readonly string ARQ_EQUIPAMENTOS = "equipamentos.txt";
+        private static readonly string ARQ_VENDAS = "vendas.txt";
     }
 }
