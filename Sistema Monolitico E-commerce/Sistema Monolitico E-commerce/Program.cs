@@ -363,5 +363,186 @@ static void CadastrarEquipamento()
 
     ExibirMensagemSucesso("Equipamento cadastrado e salvo com sucesso!");
    }
+
+static void MenuRealizarVenda()
+{
+    Console.Clear();
+    ExibirCabecalho("--- REALIZAR VENDA ---", ConsoleColor.Magenta);
+    Console.WriteLine("1 - Vender Kimono");
+    Console.WriteLine("2 - Vender Equipamento/Acessório");
+    Console.WriteLine("0 - Voltar");
+    Console.Write("\nOpção: ");
+    string op = Console.ReadLine();
+
+    if (op == "1") RealizarVendaKimono();
+    else if (op == "2") RealizarVendaEquipamento();
+}
+
+static void RealizarVendaKimono()
+{
+    Console.Clear();
+    ExibirCabecalho("--- VENDA DE KIMONO ---", ConsoleColor.Magenta);
+
+    Console.Write("Digite o Nome/Modelo do Kimono: ");
+    string nome = Console.ReadLine().Trim();
+
+    int index = listaKimonos.FindIndex(k => k.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
+
+    if (index == -1)
+    {
+        ExibirMensagemErro("Kimono não encontrado no estoque!");
+        return;
+    }
+
+    Kimono k = listaKimonos[index];
+    Console.WriteLine($"Estoque atual de '{k.Nome}': {k.Quantidade} unidade(s).");
+
+    int qtdVenda = LerInteiroPositivo("Quantidade a vender: ");
+
+    if (qtdVenda > k.Quantidade)
+    {
+        ExibirMensagemErro("Estoque insuficiente para realizar esta venda!");
+        return;
+    }
+
+    k.Quantidade -= qtdVenda;
+    listaKimonos[index] = k;
+    SalvarKimonos();
+
+    Venda v;
+    v.NomeProduto = k.Nome;
+    v.Categoria = "Kimono";
+    v.QuantidadeVendida = qtdVenda;
+    v.PrecoUnitario = k.Preco;
+    v.ValorTotal = k.Preco * qtdVenda;
+
+    listaVendas.Add(v);
+    SalvarVendas();
+
+    ExibirMensagemSucesso($"Venda realizada! Total: R$ {v.ValorTotal:F2}");
+}
+
+static void RealizarVendaEquipamento()
+{
+    Console.Clear();
+    ExibirCabecalho("--- VENDA DE EQUIPAMENTO ---", ConsoleColor.Magenta);
+
+    Console.Write("Digite o Nome do Equipamento: ");
+    string nome = Console.ReadLine().Trim();
+
+    int index = listaEquipamentos.FindIndex(eq => eq.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
+
+    if (index == -1)
+    {
+        ExibirMensagemErro("Equipamento não encontrado no estoque!");
+        return;
+    }
+
+    Equipamento eq = listaEquipamentos[index];
+    Console.WriteLine($"Estoque atual de '{eq.Nome}': {eq.Quantidade} unidade(s).");
+
+    int qtdVenda = LerInteiroPositivo("Quantidade a vender: ");
+
+    if (qtdVenda > eq.Quantidade)
+    {
+        ExibirMensagemErro("Estoque insuficiente para realizar esta venda!");
+        return;
+    }
+
+    eq.Quantidade -= qtdVenda;
+    listaEquipamentos[index] = eq;
+    SalvarEquipamentos();
+
+    Venda v;
+    v.NomeProduto = eq.Nome;
+    v.Categoria = eq.Categoria;
+    v.QuantidadeVendida = qtdVenda;
+    v.PrecoUnitario = eq.Preco;
+    v.ValorTotal = eq.Preco * qtdVenda;
+
+    listaVendas.Add(v);
+    SalvarVendas();
+
+    ExibirMensagemSucesso($"Venda realizada! Total: R$ {v.ValorTotal:F2}");
+}
+
+static void MenuConsultarExcluir()
+{
+    Console.Clear();
+    ExibirCabecalho("--- CONSULTAR / EXCLUIR PRODUTO ---", ConsoleColor.Yellow);
+    Console.Write("Digite o nome do produto que deseja pesquisar: ");
+    string busca = Console.ReadLine().Trim();
+
+    for (int i = 0; i < listaKimonos.Count; i++)
+    {
+        if (listaKimonos[i].Nome.Equals(busca, StringComparison.OrdinalIgnoreCase))
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n[PRODUTO ENCONTRADO]");
+            Console.WriteLine(listaKimonos[i].ToString());
+            Console.ResetColor();
+
+            Console.Write("\nDeseja EXCLUIR este Kimono? (S/N): ");
+            if (Console.ReadLine().Trim().ToUpper() == "S")
+            {
+                listaKimonos.RemoveAt(i);
+                SalvarKimonos();
+                ExibirMensagemSucesso("Kimono excluído do estoque com sucesso!");
+            }
+            return;
+        }
+    }
+
+    for (int i = 0; i < listaEquipamentos.Count; i++)
+    {
+        if (listaEquipamentos[i].Nome.Equals(busca, StringComparison.OrdinalIgnoreCase))
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n[PRODUTO ENCONTRADO]");
+            Console.WriteLine(listaEquipamentos[i].ToString());
+            Console.ResetColor();
+
+            Console.Write("\nDeseja EXCLUIR este Equipamento? (S/N): ");
+            if (Console.ReadLine().Trim().ToUpper() == "S")
+            {
+                listaEquipamentos.RemoveAt(i);
+                SalvarEquipamentos();
+                ExibirMensagemSucesso("Equipamento excluído do estoque com sucesso!");
+            }
+            return;
+        }
+    }
+
+    ExibirMensagemErro("Nenhum produto cadastrado com esse nome.");
+}
+
+static void ImprimirEstoque()
+{
+    Console.Clear();
+    ExibirCabecalho("--- RELATÓRIO DE ESTOQUE COMPLETO ---", ConsoleColor.Blue);
+
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine("=== KIMONOS ===");
+    Console.ResetColor();
+    if (listaKimonos.Count == 0) Console.WriteLine("Nenhum kimono cadastrado.");
+    else
+    {
+        foreach (var k in listaKimonos)
+            Console.WriteLine(k.ToString());
+    }
+
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine("\n=== EQUIPAMENTOS / ACESSÓRIOS ===");
+    Console.ResetColor();
+    if (listaEquipamentos.Count == 0) Console.WriteLine("Nenhum equipamento cadastrado.");
+    else
+    {
+        foreach (var eq in listaEquipamentos)
+            Console.WriteLine(eq.ToString());
+    }
+
+    Console.WriteLine("\nPressione ENTER para voltar...");
+    Console.ReadLine();
+ }
  }
 }
