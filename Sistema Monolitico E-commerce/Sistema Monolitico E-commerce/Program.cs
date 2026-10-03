@@ -544,5 +544,53 @@ static void ImprimirEstoque()
     Console.WriteLine("\nPressione ENTER para voltar...");
     Console.ReadLine();
  }
+
+static void ImprimirRelatorioVendas()
+{
+    Console.Clear();
+    ExibirCabecalho("--- RELATÓRIO DE VENDAS ---", ConsoleColor.Blue);
+
+    if (listaVendas.Count == 0)
+    {
+        Console.WriteLine("Nenhuma venda registrada.");
+        Console.WriteLine("\nPressione ENTER para voltar...");
+        Console.ReadLine();
+        return;
+    }
+
+    foreach (var v in listaVendas)
+        Console.WriteLine(v.ToString());
+
+    // Soma o total vendido de cada categoria, sem repetir categoria na lista
+    List<string> categorias = new List<string>();
+    List<double> totaisPorCategoria = new List<double>();
+
+    foreach (var v in listaVendas)
+    {
+        int indice = categorias.IndexOf(v.Categoria);
+        if (indice == -1)
+        {
+            categorias.Add(v.Categoria);
+            totaisPorCategoria.Add(v.ValorTotal);
+        }
+        else
+        {
+            totaisPorCategoria[indice] += v.ValorTotal;
+        }
+    }
+
+    Console.WriteLine("\n--- TOTAL POR CATEGORIA ---");
+    double totalGeral = 0;
+    for (int i = 0; i < categorias.Count; i++)
+    {
+        Console.WriteLine($"{categorias[i]}: R$ {totaisPorCategoria[i]:F2}");
+        totalGeral += totaisPorCategoria[i];
+    }
+
+    Console.WriteLine($"\nTOTAL GERAL: R$ {totalGeral:F2}");
+
+    Console.WriteLine("\nPressione ENTER para voltar...");
+    Console.ReadLine();
+}
  }
 }
