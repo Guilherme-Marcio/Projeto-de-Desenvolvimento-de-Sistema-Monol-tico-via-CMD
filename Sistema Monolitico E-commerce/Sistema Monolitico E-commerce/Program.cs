@@ -314,6 +314,56 @@ namespace Sistema_Monolitico_E_commerce
             Console.WriteLine();
         }
 
+        // Repete a pergunta até o usuário digitar um número inteiro maior que zero
+        static int LerInteiroPositivo(string mensagem)
+        {
+            int valor;
+            while (true)
+            {
+                Console.Write(mensagem);
+                if (int.TryParse(Console.ReadLine(), out valor) && valor > 0)
+                    return valor;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Valor inválido! Digite um número inteiro maior que zero.");
+                Console.ResetColor();
+            }
+        }
+
+        // Repete a pergunta até o usuário digitar um número maior que zero (aceita vírgula)
+        static double LerDoublePositivo(string mensagem)
+        {
+            double valor;
+            while (true)
+            {
+                Console.Write(mensagem);
+                if (double.TryParse(Console.ReadLine(), out valor) && valor > 0)
+                    return valor;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Valor inválido! Digite um número maior que zero (ex: 199,90).");
+                Console.ResetColor();
+            }
+        }
+
+        static void ExibirMensagemErro(string mensagem)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\n[ERRO] " + mensagem);
+            Console.ResetColor();
+            Console.WriteLine("Pressione ENTER para continuar...");
+            Console.ReadLine();
+        }
+
+        static void ExibirMensagemSucesso(string mensagem)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\n[OK] " + mensagem);
+            Console.ResetColor();
+            Console.WriteLine("Pressione ENTER para continuar...");
+            Console.ReadLine();
+        }
+
         static void MenuCadastrarProduto()
         {
             Console.Clear();
@@ -395,7 +445,7 @@ namespace Sistema_Monolitico_E_commerce
             Console.Write("Digite o Nome/Modelo do Kimono: ");
             string nome = Console.ReadLine().Trim();
 
-            int index = listaKimonos.FindIndex(k => k.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
+            int index = listaKimonos.FindIndex(item => item.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
 
             if (index == -1)
             {
@@ -439,7 +489,7 @@ namespace Sistema_Monolitico_E_commerce
             Console.Write("Digite o Nome do Equipamento: ");
             string nome = Console.ReadLine().Trim();
 
-            int index = listaEquipamentos.FindIndex(eq => eq.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
+            int index = listaEquipamentos.FindIndex(item => item.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase));
 
             if (index == -1)
             {
