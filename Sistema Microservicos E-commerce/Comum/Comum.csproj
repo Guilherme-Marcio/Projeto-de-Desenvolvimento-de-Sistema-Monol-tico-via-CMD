@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Biblioteca compartilhada: contratos (DTOs) e infraestrutura HTTP/JSON/arquivos.
+       Não contém regra de negócio: cada serviço é dono da sua lógica e dos seus dados. -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ArteSuave.Comum</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+</Project>
