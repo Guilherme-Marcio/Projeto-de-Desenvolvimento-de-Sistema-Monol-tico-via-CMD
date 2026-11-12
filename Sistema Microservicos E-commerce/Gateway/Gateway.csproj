@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ArteSuave.Gateway</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+    <ProjectReference Include="..\Comum\Comum.csproj" />
+  </ItemGroup>
+</Project>
